@@ -27,21 +27,24 @@ let playerSpeed = 300;
 let aiSpeed = 250;
 
 function preload() {
-    this.load.image('paddle', 'assets/paddle.png');
-    this.load.image('ball', 'assets/ball.png');
 }
 
 function create() {
-    playerPaddle = this.physics.add.sprite(32, config.height / 2, 'paddle');
-    aiPaddle = this.physics.add.sprite(config.width - 32, config.height / 2, 'paddle');
-    ball = this.physics.add.sprite(config.width / 2, config.height / 2, 'ball');
+    // Create paddles
+    playerPaddle = this.physics.add.rectangle(32, config.height / 2, 20, 100, 0xffffff);
+    aiPaddle = this.physics.add.rectangle(config.width - 32, config.height / 2, 20, 100, 0xffffff);
 
+    // Create ball
+    ball = this.physics.add.circle(config.width / 2, config.height / 2, 10, 0xffffff);
+
+    // Set physics properties
     playerPaddle.setCollideWorldBounds(true);
     aiPaddle.setCollideWorldBounds(true);
     ball.setCollideWorldBounds(true);
     ball.setBounce(1, 1);
     ball.setVelocity(200, 200);
 
+    // Set collider
     this.physics.add.collider(ball, playerPaddle, onBallHitPaddle, null, this);
     this.physics.add.collider(ball, aiPaddle, onBallHitPaddle, null, this);
 
@@ -49,6 +52,7 @@ function create() {
 }
 
 function update() {
+    // Player controls
     if (cursors.up.isDown) {
         playerPaddle.setVelocityY(-playerSpeed);
     } else if (cursors.down.isDown) {
@@ -57,8 +61,9 @@ function update() {
         playerPaddle.setVelocityY(0);
     }
 
+    // AI paddle movement
     if (ball.y < aiPaddle.y) {
-            aiPaddle.setVelocityY(-aiSpeed);
+        aiPaddle.setVelocityY(-aiSpeed);
     } else if (ball.y > aiPaddle.y) {
         aiPaddle.setVelocityY(aiSpeed);
     } else {
@@ -84,4 +89,3 @@ function resetBall(ball) {
     ball.setPosition(config.width / 2, config.height / 2);
     ball.setVelocity(200, 200);
 }
-
