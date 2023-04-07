@@ -48,19 +48,13 @@ function create() {
     this.physics.add.collider(ball, playerPaddle, onBallHitPaddle, null, this);
     this.physics.add.collider(ball, aiPaddle, onBallHitPaddle, null, this);
 
-    cursors = this.input.keyboard.createCursorKeys();
+    // Touch input
+    this.input.on('pointermove', (pointer) => {
+        playerPaddle.y = Phaser.Math.Clamp(pointer.y, playerPaddle.height / 2, config.height - playerPaddle.height / 2);
+    });
 }
 
 function update() {
-    // Player controls
-    if (cursors.up.isDown) {
-        playerPaddle.setVelocityY(-playerSpeed);
-    } else if (cursors.down.isDown) {
-        playerPaddle.setVelocityY(playerSpeed);
-    } else {
-        playerPaddle.setVelocityY(0);
-    }
-
     // AI paddle movement
     if (ball.y < aiPaddle.y) {
         aiPaddle.setVelocityY(-aiSpeed);
